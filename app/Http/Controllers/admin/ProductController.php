@@ -19,8 +19,8 @@ class ProductController extends Controller
 
     //add product page
     public function addProduct(){
-        $category = Category::whereNull('cat_id')->get();
-        return view('admin.product.add-product', compact('category'));
+        $categories = Category::whereNull('cat_id')->get();
+        return view('admin.product.add-product', compact('categories'));
     }
 
     //create product

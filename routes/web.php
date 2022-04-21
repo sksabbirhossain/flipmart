@@ -3,6 +3,7 @@
 use App\Http\Controllers\admin\AdminController;
 use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\ProductController;
+use App\Http\Controllers\frontend\HomeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,10 +17,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
 
-    return view('welcome');
-});
+
+//frontend all route here
+Route::get('/', [HomeController::class, 'homePage']);
+
+
+
 
 // admin all route start here
 //dashboard

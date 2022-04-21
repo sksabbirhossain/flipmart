@@ -28,8 +28,9 @@
                   <th>ID</th>
                   <th style="min-width: 250px">Product Name</th>
                   <th>Image</th>
-                  <th>Product Description</th>
+                  {{-- <th>Product Description</th> --}}
                   <th style="min-width: 120px">category</th>
+                  <th style="min-width: 120px">Sub Category</th>
                   <th>Price</th>
                   <th>Quenty</th>
                   <th style="min-width: 100px">Actions</th>
@@ -37,11 +38,16 @@
                 </thead>
                 <tbody>
                   @foreach ($products as $product)
+                  @php $catData = App\Models\Category::where('category_id',$product->cat_id)->first();
+                  
+                    $parentcatData = App\Models\Category::where('category_id',$catData->cat_id)->first();
+                  @endphp
                   <tr>
                     <td>{{ $product->product_id }}</td>
                     <td>{{ $product->product_name }}</td>
                     <td><img src="{{ asset('uploads/productImages/'.$product->image) }}" alt="" style="width: 60px;height:60px; border-radius: 10%; object-fit: cover;"></td>
-                    <td>{{ Str::limit($product->description, 200) }}</td>
+                    {{-- <td>{{ Str::limit($product->description, 200) }}</td> --}}
+                    <td> {{ $parentcatData->category_name}} </td>
                     <td> {{ $product->category->category_name}} </td>
                     <td>{{ $product->price }}</td>
                     <td>{{ $product->qty }}</td>

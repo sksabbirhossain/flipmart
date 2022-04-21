@@ -52,7 +52,7 @@
                                         <label for="cat_id">Category</label>
                                         <select class="form-control" name="category"> 
                                             <option selected="selected" value="">Select Category</option>
-                                            @foreach ($category as $category)
+                                            @foreach ($categories as $category)
                                                 <option value="{{ $category->category_id }}">{{ $category->category_name }}</option>
                                             @endforeach
                                         </select>
@@ -63,8 +63,11 @@
                                         <label for="cat_id">Sub Category</label>
                                         <select class="form-control" name="cat_id">
                                             <option selected="selected" value="">Select Category</option>
-                                            @foreach ($category->subCategory as $category)
-                                                <option value="{{ $category->category_id }}">{{ $category->category_name }}</option>
+                                            @foreach ($categories as $cat)
+                                                @foreach ($cat->subCategory as $sub)
+                                                <option value="{{ $sub->category_id }}">{{ $sub->category_name }}</option>
+                                                @endforeach
+                                                
                                             @endforeach
                                         </select>
                                         <strong class="text-danger">@error('cat_id') {{ $message }}  @enderror</strong>
