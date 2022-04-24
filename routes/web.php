@@ -4,6 +4,7 @@ use App\Http\Controllers\admin\AdminController;
 use App\Http\Controllers\admin\CategoryController;
 use App\Http\Controllers\admin\ProductController;
 use App\Http\Controllers\frontend\HomeController;
+use App\Http\Controllers\frontend\ProductDetailsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,6 +22,10 @@ use Illuminate\Support\Facades\Route;
 
 //frontend all route here
 Route::get('/', [HomeController::class, 'homePage']);
+//show products by categoey
+Route::get('category-product/{id}', [HomeController::class, 'showCategoryProduct']);
+
+Route::get('/product-details/{slug}/{id}', [ProductDetailsController::class, 'productDetails']);
 
 
 
