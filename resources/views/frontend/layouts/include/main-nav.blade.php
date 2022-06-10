@@ -6,11 +6,15 @@
             <div class="header-top-inner">
                 <div class="cnt-account">
                     <ul class="list-unstyled">
-                        <li><a href="#"><i class="icon fa fa-user"></i>My Account</a></li>
-                        <li><a href="#"><i class="icon fa fa-heart"></i>Wishlist</a></li>
-                        <li><a href="#"><i class="icon fa fa-shopping-cart"></i>My Cart</a></li>
-                        <li><a href="#"><i class="icon fa fa-check"></i>Checkout</a></li>
-                        <li><a href="#"><i class="icon fa fa-lock"></i>Login</a></li>
+                        @auth
+                        <li><a href="{{ route('user.account') }}"><i class="icon fa fa-user"></i>My Account</a></li>
+                        <li><a href="{{ route('user.wishlist') }}"><i class="icon fa fa-heart"></i>Wishlist</a></li>
+                        <li><a href="{{ route('user.checkout') }}"><i class="icon fa fa-check"></i>Checkout</a></li>
+                        <li><a href="{{ route('user.logout') }}"><i class="icon fa fa-check"></i>LogOut</a></li>
+                        @endauth
+                        @guest
+                        <li><a href="{{ route('user.login') }}"><i class="icon fa fa-lock"></i>Login</a></li>
+                        @endguest
                     </ul>
                 </div><!-- /.cnt-account -->
 
@@ -81,7 +85,7 @@
                                 <div class="basket">
                                     <i class="glyphicon glyphicon-shopping-cart"></i>
                                 </div>
-                                <div class="basket-item-count"><span class="count">2</span></div>
+                                <div class="basket-item-count"><span class="count">{{ Cart::getTotalQuantity() }}</span></div>
                                 <div class="total-price-basket">
                                     <span class="lbl">cart -</span>
                                     <span class="total-price">
@@ -95,41 +99,49 @@
                         <ul class="dropdown-menu">
                             <li>
                                 <div class="cart-item product-summary">
+
+                            @foreach (Cart::getContent() as $cart)
                                     <div class="row">
                                         <div class="col-xs-4">
                                             <div class="image">
-                                                <a href="detail.html"><img
-                                                        src="{{ asset('frontend/assets/images/cart.jpg') }}" alt=""></a>
+                                                <a href="#">
+                                                    <img
+                                                    src="{{ asset('uploads/productImages/'.$cart->attributes->image) }}" alt="">
+                                                </a>
                                             </div>
                                         </div>
                                         <div class="col-xs-7">
 
-                                            <h3 class="name"><a href="index8a95.html?page-detail">Simple Product</a>
+                                            <h3 class="name"><a href="#">{{ $cart->name }}</a>
                                             </h3>
-                                            <div class="price">$600.00</div>
+                                                <div class="d-flex">
+                                                    <span class="price">Price: ${{ $cart->price }} </span>
+                                                    <span class="d-flex">
+                                                        <label for="">Qty:</label>
+                                                        <input type="number" class="quantity" data-id="{{ $cart->id }}" name="cartquantity" min="1" value="{{ $cart->quantity }}" style="width:50%">
+                                                    </span>
+                                                </div>                                       
                                         </div>
                                         <div class="col-xs-1 action">
-                                            <a href="#"><i class="fa fa-trash"></i></a>
+                                            <a href="#" class="deleteCart" data-id="{{ $cart->id }}"><i class="fa fa-trash"></i></a>
                                         </div>
                                     </div>
+                                    <hr>
+                                    @endforeach
                                 </div><!-- /.cart-item -->
                                 <div class="clearfix"></div>
                                 <hr>
-
                                 <div class="clearfix cart-total">
                                     <div class="pull-right">
-
-                                        <span class="text">Sub Total :</span><span class='price'>$600.00</span>
-
+                                        <span class="text">Sub Total :</span><span class='price cartPrice'>${{Cart::getSubTotal()}}</span>
                                     </div>
                                     <div class="clearfix"></div>
 
-                                    <a href="checkout.html"
+                                    <a href="{{ route('user.checkout') }}"
                                         class="btn btn-upper btn-primary btn-block m-t-20">Checkout</a>
                                 </div><!-- /.cart-total-->
-
-
                             </li>
+                            
                         </ul><!-- /.dropdown-menu-->
                     </div><!-- /.dropdown-cart -->
 

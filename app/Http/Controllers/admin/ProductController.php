@@ -12,19 +12,22 @@ use Illuminate\Support\Str;
 class ProductController extends Controller
 {
     //product page
-    public function allProduct(){
+    public function allProduct()
+    {
         $products = Product::all();
         return view('admin.product.product', compact('products'));
     }
 
     //add product page
-    public function addProduct(){
+    public function addProduct()
+    {
         $categories = Category::whereNull('cat_id')->get();
         return view('admin.product.add-product', compact('categories'));
     }
 
     //create product
-    public function createProduct(Request $request){
+    public function createProduct(Request $request)
+    {
         $request->validate([
             'product_name' => 'required',
             'category' => 'required',
@@ -41,11 +44,11 @@ class ProductController extends Controller
         $product->product_name = $request->product_name;
         $product->slug = Str::slug($request->product_name);
         $product->cat_id = $request->cat_id;
-        if($request->hasfile('image')){
+        if ($request->hasfile('image')) {
             $file = $request->file('image');
             $exten = $file->getClientOriginalExtension();
-            $fileName = time().'.'.$exten;
-            $file->move('uploads/productImages',$fileName);
+            $fileName = time() . '.' . $exten;
+            $file->move('uploads/productImages', $fileName);
             $product->image = $fileName;
         }
         $product->qty = $request->qty;
@@ -53,17 +56,25 @@ class ProductController extends Controller
         $product->small_description = $request->small_description;
         $product->description = $request->description;
         $query = $product->save();
-        if($query){
+        if ($query) {
             return back()->with('success', 'product add successfully');
-        }else{
+        } else {
             return back()->with('fail', 'something worng');
         }
     }
 
     //edit product page
-    public function editproduct($id){
+    public function editproduct($id)
+    {
         $productData = Product::find($id);
         $category = Category::whereNull('cat_id')->get();
         return view('admin.product.edit-product', compact('productData', 'category'));
+    }
+
+    //delete prodct
+    public function deleteproduct($id)
+    {
+        Product::find($id)->delete();
+        return back();
     }
 }

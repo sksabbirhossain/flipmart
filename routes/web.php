@@ -1,11 +1,11 @@
 <?php
 
-use App\Http\Controllers\admin\AdminController;
-use App\Http\Controllers\admin\CategoryController;
-use App\Http\Controllers\admin\ProductController;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\frontend\CartController;
 use App\Http\Controllers\frontend\HomeController;
 use App\Http\Controllers\frontend\ProductDetailsController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\frontend\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,43 +18,34 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Auth::routes();
+Route::middleware(['guest:web'])->group(function () {
+    //user login
+     Route::view('/user/login', 'frontend.login.login')->name('user.login');
+     Route::post('/user/check', [UserController::class, 'check'])->name('user.login.check');
+     Route::view('/user/register', 'frontend.login.signup')->name('user.signup');
+     Route::post('/user/register', [UserController::class, 'userCreate'])->name('user.register');
+ });
 
 
-//frontend all route here
-Route::get('/', [HomeController::class, 'homePage']);
+//home
+Route::get('/', [HomeController::class, 'homePage'])->name('home');
 //show products by categoey
 Route::get('category-product/{id}', [HomeController::class, 'showCategoryProduct']);
 
+//product details
 Route::get('/product-details/{slug}/{id}', [ProductDetailsController::class, 'productDetails']);
 
+//cart route
+Route::post('/add-to-cart', [CartController::class, 'store']);
+Route::patch('/cart-update/{id}', [CartController::class, 'updateCart']);
+Route::delete('/cart-remove/{id}', [CartController::class, 'delete']);
 
 
 
-// admin all route start here
-//dashboard
-Route::get('/admin/dashboard', [AdminController::class, 'dashboard']);
-//all category page
-Route::get('/admin/all-category', [CategoryController::class, 'allcategory']);
-//add category page
-Route::get('/admin/add-category', [CategoryController::class, 'addcategory']);
-//add category 
-Route::post('/admin/add-category', [CategoryController::class, 'createCategory']);
-//edit category  page
-Route::get('/admin/edit-category/{id}', [CategoryController::class, 'editCategory']);
-//update category 
-Route::post('/admin/edit-category/{id}', [CategoryController::class, 'updateCategory']);
-//delete category 
-Route::get('/admin/delete-category/{id}', [CategoryController::class, 'deleteCategory']);
-
-//product page
-Route::get('/admin/all-products', [ProductController::class, 'allProduct']);
-//product page
-Route::get('/admin/add-product', [ProductController::class, 'addProduct']);
-//add product 
-Route::post('/admin/add-product', [ProductController::class, 'createProduct']);
-//edit product  page
-Route::get('/admin/edit-product/{id}', [ProductController::class, 'editproduct']);
-//update product 
-Route::post('/admin/edit-product/{id}', [ProductController::class, 'updateproduct']);
-//delete product 
-Route::get('/admin/delete-product/{id}', [ProductController::class, 'deleteproduct']);
+Route::middleware(['auth:web'])->group(function () {
+   Route::get('/logout', [UserController::class, 'logoutUser'])->name('user.logout');
+   Route::view('/my-account', 'frontend.account.account')->name('user.account');
+   Route::view('/my-wishlist', 'frontend.wishlist.wishlist')->name('user.wishlist');
+   Route::view('/my-checkout', 'frontend.checkout.checkout')->name('user.checkout');
+});
