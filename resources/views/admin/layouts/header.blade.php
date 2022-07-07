@@ -161,6 +161,23 @@
           <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
         </div>
       </li>
+      <!-- user  Menu -->
+      <li class="nav-item dropdown">
+        <a class="nav-link" data-toggle="dropdown" href="#">
+          <img src="{{ Auth::guard('admin')->user()->image == NULL ? asset('noImages/noimage.jpg') : asset('noImages/'.Auth::guard('admin')->user()->image) }}" class="img-fluid mr-1" style="border-radius: 50%; width:25px; border:1px solid; " alt="">
+
+          <span class="">{{ Auth::guard('admin')->user()->name }}</span>
+        </a>
+        <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+          <div class="d-flex mt-3 justify-content-center">
+            <img class="img-fluid" src="{{ Auth::guard('admin')->user()->image == NULL ? asset('noImages/noimage.jpg') : asset('noImages/'.Auth::guard('admin')->user()->image) }}" alt="" style="border-radius: 5%; width:95px; border:1px solid; ">
+          </div>
+          <a href=" {{ route('admin.logout') }} " class="dropdown-item">
+            <div class="dropdown-divider"></div>
+            <span class="float-right text-muted btn btn-success m-1">LogOut</span>
+          </a>
+        </div>
+      </li>
     </ul>
   </nav>
   <!-- /.navbar -->
